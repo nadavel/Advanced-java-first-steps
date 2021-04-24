@@ -1,0 +1,57 @@
+import javax.swing.*;
+import java.awt.*;
+
+//this class is used to paint the Hangman
+public class Hangman extends JPanel {
+    private int mistakes;
+    public Hangman(){
+        mistakes = 0;
+    }
+
+    public void mistake(){
+        mistakes++;
+    }
+
+    public int getMistakes(){
+        return mistakes;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        int base = 150;
+
+        if (mistakes > 0){
+            g.drawLine(90, base, 200, base); //The ground
+            g.drawLine(125, base, 125, base-100); //The bar going up
+            g.drawLine(125, base-100, 175, base-100); //The sidebar
+            g.drawLine(175, base-100, 175, base-75); //The Rope
+        }
+        if (mistakes > 1) {
+            g.drawOval(170, base-75, 10, 12); // The Head
+        }
+        if (mistakes > 2) {
+            g.drawLine(175, base-62, 175, base-45); // The Body    
+        }
+
+        if (mistakes > 3) {
+            g.drawLine(165, base-65, 175, base-55); // Left Arm  
+        }
+
+        if (mistakes > 4) {
+            g.drawLine(185, base-65, 175, base-55); // Right Arm 
+        }
+
+        if (mistakes > 5) {
+            g.drawLine(170, base-30, 175, base-45); //Left Leg       
+        }
+
+        if (mistakes > 6) {  //7 mistakes
+            g.drawLine(175, base-45, 180, base-30); // Right Left 
+        }
+    }
+    public void reset(){
+        mistakes=0;
+        repaint();
+    }
+}

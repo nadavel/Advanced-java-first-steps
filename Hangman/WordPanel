@@ -1,0 +1,79 @@
+import javax.swing.*;
+import java.awt.*;
+
+//this class represents the word to guess
+public class WordPanel extends JPanel {
+    private int found=0;
+    private boolean gameWon;
+    private String phrase, result="";
+    private char[] letters;
+
+//constructor
+    public WordPanel(String word){
+        gameWon=false;
+        phrase = word;
+        letters = word.toCharArray();
+        hint(letters); //replace the word's letters with underscore (_______) as an obscure hint
+
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Font font = new Font("Serif",Font.BOLD,32);
+        g.setFont(font);
+        FontMetrics fm = g.getFontMetrics();
+        int x = ((getWidth() - fm.stringWidth(result)) / 2) ;
+        int y = ((getHeight() - fm.getHeight()) / 2) + fm.getAscent();
+        g.drawString(result,x, y);
+    }
+//converts the word to guess into obscure hint
+    public String hint(char[] letters){
+
+        for (int i = 0; i < letters.length;i++) {
+            if (letters[i] != ' ')
+                result += "_ ";
+            else
+                result += '-';
+        }
+        return result;
+    }
+
+//checks if the input letter appears in the word to guess
+    public boolean check(char c){
+        char [] resultChars = result.toCharArray();
+        int index = phrase.indexOf(c);
+        if(index==-1) //input letter does not appear in the word
+            return false;
+        //letter appears in the word, finds all instances of it
+        while (index >= 0){
+            found++;
+            if (index==0)
+                resultChars[index]=c;
+            else
+                resultChars[index*2]=c;
+            index = phrase.indexOf(c, index + 1);
+        }
+        result = String.valueOf(resultChars);
+        repaint();
+        if (found==phrase.length()) //finished guessing all of the letters
+            gameWon = true;
+        return true;
+    }
+    public boolean getGameWon(){
+        return gameWon;
+    }
+    //reinitialize data for starting a new game
+    public void reset(String word){
+        found=0;
+        gameWon=false;
+        result="";
+        phrase = word;
+        letters = word.toCharArray();
+        hint(letters);
+        repaint();
+    }
+}
+
+
+
